@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout 
+	android:id="@+id/RelativeLayout01" 
+	android:layout_width="fill_parent" 
+	xmlns:android="http://schemas.android.com/apk/res/android" 
+	android:layout_height="wrap_content" 
+	android:paddingTop="15dip"
+	android:paddingBottom="15dip" 
+	android:paddingLeft="15dip"
+	android:paddingRight="15dip">
+	<TextView 
+		android:textSize="16dip" 
+	    android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content" 
+	    android:id="@+id/ItemHelpHisDateTime"
+	    android:textColor="#888888"
+	    />
+	<TextView 
+		android:textSize="20dip" 
+	    android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content" 
+	    android:id="@+id/ItemHelpHisOrgName"
+	    android:layout_below="@+id/ItemHelpHisDateTime"
+	    android:textColor="#FF0080"
+	    />
+   <TextView 
+		android:textSize="32dip" 
+	    android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content" 
+	    android:id="@+id/ItemHelpHisAmount"
+	    android:layout_alignParentRight="true"
+	    android:textColor="#FFFFFF"
+	    />
+	
+</RelativeLayout>

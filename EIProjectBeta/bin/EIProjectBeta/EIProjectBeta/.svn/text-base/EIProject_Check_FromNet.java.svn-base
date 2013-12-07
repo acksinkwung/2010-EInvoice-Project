@@ -1,0 +1,18 @@
+package EIProjectBeta.EIProjectBeta;
+
+import android.app.Activity;
+import android.os.Bundle;
+
+
+
+
+public class EIProject_Check_FromNet  extends Activity {
+	
+	public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.check_main);
+      
+	}
+	
+
+}

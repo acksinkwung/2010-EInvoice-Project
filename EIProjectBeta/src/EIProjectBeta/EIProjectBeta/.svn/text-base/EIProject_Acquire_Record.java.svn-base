@@ -1,0 +1,176 @@
+package EIProjectBeta.EIProjectBeta;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import android.content.Intent;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ViewFlipper;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
+
+public class EIProject_Acquire_Record extends EIProject_Acquire{
+	protected int selRecord;
+	protected ViewFlipper viewFlipperAcquireRecord;
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.acquire_his_main_1);
+		ListView list = (ListView) findViewById(R.id.AcquireHisMenuListView);
+		listItem = getCerMenuData();
+        SimpleAdapter listItemAdapter = new SimpleAdapter(EIProject_Acquire_Record.this,listItem,R.layout.acquire_his_detail_list_items,     
+	            new String[] {"ItemAcquireHisDate","ItemAcquireHisMoney"}, 
+	            new int[] {R.id.ItemAcquireHisDate,R.id.ItemAcquireHisMoney}
+	    );
+		list.setAdapter(listItemAdapter);  
+		list.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				selRecord = arg2;	
+				Intent intent = new Intent();
+		        intent.setClass(EIProject_Acquire_Record.this,EIProject_Acquire_Record_Detail.class);
+		    	startActivity(intent);
+			}
+		});
+	}
+    protected void showAcquireCerIDetail(int id) {
+    	setContentView(R.layout.acquire_his_main_2);
+    	ArrayList<HashMap<String, Object>> CerMenuData = getCerMenuData(); 
+    	TextView text = (TextView) findViewById(R.id.HistoryDetailAcquireDialogItemDateTime);
+        text.setText(CerMenuData.get(id).get("ItemAcquireHisDate").toString());
+		text = (TextView) findViewById(R.id.HistoryDetailAcquireDialogItemCount);
+        text.setText(CerMenuData.get(id).get("ItemAcquireHisCount").toString());
+        text = (TextView) findViewById(R.id.HistoryDetailAcquireDialogItemTotalMoney);
+        text.setText(CerMenuData.get(id).get("ItemAcquireHisMoney").toString());
+		text = (TextView) findViewById(R.id.HistoryDetailAcquireDialogItemTaxMoney);
+        text.setText(CerMenuData.get(id).get("ItemAcquireHisTaxMoney").toString());
+		TextView title = (TextView) findViewById(R.id.tvHistoryDetailAcquireMenuTitle);
+		int n = ((Integer.parseInt(CerMenuData.get(id).get("ItemAcquireHisDate").toString().split("/")[1])+1)/2+1)-2;
+		listItem = getCerIDetailData(CerMenuData.get(id).get("ItemAcquireHisIID").toString());
+        title.setText("99ж~ "+monthCStr[n*2]+"ды~"+monthCStr[n*2+1]+"ды");
+	    ListView list = (ListView) findViewById(R.id.HistoryDetailAcquireMenuListView);
+		SimpleAdapter listItemAdapter = new SimpleAdapter(this,listItem,
+	            R.layout.acquire_detail_list_items2,     
+	            new String[] {"ItemInvoiceNumber","ItemInvoiceNumberLight","ItemDateTime", "ItemMoney","ItemStatusA"}, 
+	            new int[] {R.id.ItemAcquireInvoiceNumber,R.id.ItemAcquireInvoiceNumberLight,R.id.ItemAcquireDateTime,R.id.ItemAcquireMoney,R.id.ItemAcquireStatus}
+	    );
+		list.setAdapter(listItemAdapter);  
+		list.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				
+			}
+		});
+		Button btnR31 = (Button)findViewById(R.id.ItemHistoryDetailAcquireRight31);
+		btnR31.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				viewFlipperAcquireRecord.setInAnimation(slideRightIn);
+				viewFlipperAcquireRecord.setOutAnimation(slideRightOut);
+				viewFlipperAcquireRecord.showNext();
+			}
+			
+		});
+		Button btnR32 = (Button)findViewById(R.id.ItemHistoryDetailAcquireLeft32);
+		btnR32.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				viewFlipperAcquireRecord.setInAnimation(slideLeftIn);
+				viewFlipperAcquireRecord.setOutAnimation(slideLeftOut);
+				viewFlipperAcquireRecord.showNext();
+			}
+			
+		});
+		viewFlipperAcquireRecord = (ViewFlipper) findViewById(R.id.AcquireFlipper);
+    	
+    }
+    protected ArrayList<HashMap<String, Object>> getCerIDetailData(String IID) {
+    	ArrayList<HashMap<String, Object>> alIData = new ArrayList<HashMap<String, Object>>();
+ 	    try {
+ 	    	todoAcquireDB db = new todoAcquireDB(this);
+		    Cursor cursor = db.select();
+		    int flag;
+		    while(!cursor.isLast()){
+		    	cursor.moveToNext();
+		    	flag=0;
+		    	for (int n=0; n<IID.split(",").length; n++) {
+		    		if (cursor.getString(1).equals(IID.split(",")[n])) {
+		    			flag=1;
+		    		}
+		    	}
+		    	if (flag==1) {
+			    	HashMap<String, Object> map = new HashMap<String, Object>();
+			    	
+			    	if (Integer.parseInt(cursor.getString(6))!=0) {
+			    		map.put("ItemInvoiceNumber", cursor.getString(1).substring(0,2+Integer.parseInt(cursor.getString(6))-1));
+			    		map.put("ItemInvoiceNumberLight", cursor.getString(1).substring(2+Integer.parseInt(cursor.getString(6))-1));
+			    	} else {
+			    		map.put("ItemInvoiceNumber",cursor.getString(1));
+			    	}
+			    	map.put("ItemDateTime", cursor.getString(2));
+		            map.put("ItemCheck", true);
+		            map.put("ItemIID",cursor.getString(1));
+		            map.put("ItemCR",getInvoiceCR(cursor.getString(1)));
+		            String money = "0";
+		            
+		            if (cursor.getString(6).equals("1")) {
+		            	money="$200000";
+		            }else if (cursor.getString(6).equals("2")) {
+		            	money="$40000";
+		            }else if (cursor.getString(6).equals("3")) {
+		            	money="$10000";
+		            }else if (cursor.getString(6).equals("4")) {
+		            	money="$4000";
+		            }else if (cursor.getString(6).equals("5")) {
+		            	money="$1000";
+		            }else if (cursor.getString(6).equals("6")) {
+		            	money="$200";
+		            }
+		            map.put("ItemMoney", money);
+		            map.put("ItemStatusA", R.drawable.acquire);
+		            alIData.add(map);
+		    	}
+		    }
+ 	    } catch (Exception e) {
+	        Log.e(TAG,e.toString());
+	    }    	
+		return alIData;
+    }
+    protected ArrayList<HashMap<String, Object>> getCerMenuData () {
+    	ArrayList<HashMap<String, Object>> alIData = new ArrayList<HashMap<String, Object>>();
+ 	    try {
+		    todoAcquireDB db = new todoAcquireDB(this);
+		    Cursor cursor = db.selectHistory();
+		    while(!cursor.isLast()){
+		    	cursor.moveToNext();
+		    	HashMap<String, Object> map = new HashMap<String, Object>();
+			    map.put("ItemAcquireHisDate", cursor.getString(2).split(" ")[0]);
+			    map.put("ItemAcquireHisIID",cursor.getString(3));
+			    map.put("ItemAcquireHisCount",cursor.getString(3).split(",").length);
+			    map.put("ItemAcquireHisMoney","$"+cursor.getString(4));
+			    map.put("ItemAcquireHisTaxMoney","$"+cursor.getString(4));
+		        alIData.add(map);
+		    }
+        } catch (Exception e) {
+	        Log.e(TAG,e.toString());
+	    }    	
+		return alIData;
+    	
+    }
+	
+}

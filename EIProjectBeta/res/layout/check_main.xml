@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout 
+	android:id="@+id/RelativeLayout01" 
+	android:layout_width="fill_parent" 
+	xmlns:android="http://schemas.android.com/apk/res/android" 
+	android:layout_height="fill_parent" >
+	<TextView 
+	   android:textSize="50dip" 
+	    android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content" 
+	    android:id="@+id/check_title"
+	    android:paddingTop="50dip"
+		android:paddingBottom="50dip" 
+		android:layout_centerHorizontal="true"
+		android:text="對獎GO!"
+	    android:textColor="#FFFFFF"
+	    />
+	    <TextView 
+	    android:textSize="24dip" 
+	    android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content" 
+	    android:id="@+id/check_qr"
+	    android:layout_below="@+id/check_title"
+	    android:layout_alignParentLeft="true"
+		android:text="QRcode"
+	    android:textColor="#FFFFFF"
+	    android:paddingLeft="30dip"
+	    />
+	   <ImageView        
+    	android:layout_width="100px"   
+    	android:layout_height="100px"
+    	android:id="@+id/check_qrButton"  
+    	android:src="@drawable/check_qrcode"
+    	android:layout_below="@+id/check_qr"
+    	android:paddingLeft="45dip"
+    	
+        /> 
+	    <TextView 
+	    android:textSize="24dip" 
+	    android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content" 
+	    android:id="@+id/check_net"
+	    android:paddingRight="30dip"
+	    android:layout_below="@+id/check_title"
+	    android:layout_alignParentRight="true"
+		android:text="網路對獎"
+	    android:textColor="#FFFFFF"
+	    
+	    />
+	    <ImageView       
+    	android:layout_width="100px"   
+    	android:layout_height="100px"
+    	android:id="@+id/check_ieButton"  
+    	android:src="@drawable/check_ie"
+    	android:layout_below="@+id/check_net"
+    	android:layout_alignParentRight="true"
+    	android:paddingRight="45dip"
+    	
+        /> 
+        <ImageView 
+        android:layout_width="wrap_content"   
+    	android:layout_height="wrap_content"
+        android:id="@+id/check_never"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/check_nerverdo"
+        />
+        <ImageView
+        android:layout_width="wrap_content"   
+    	android:layout_height="wrap_content" 
+        android:id="@+id/check_done"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/check_done"
+        />
+        
+	
+	
+</RelativeLayout>

@@ -1,0 +1,148 @@
+package EIProjectBeta.EIProjectBeta;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TreeMap;
+import android.app.Dialog;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
+import android.widget.ViewFlipper;
+
+public class EIProject_History_Detail extends EIProject_History {
+	private Bitmap tempMonthChart1;
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+		storeName = new TreeMap<String,String>() ;
+        showIDetail(selMonth/2);
+        if (ViewDirect==2) {
+        	setContentView(R.layout.history_main_charts);
+	        TextView tvChartTitle = (TextView) findViewById(R.id.tvChartsTitle);
+	        tvChartTitle.setText(monthCStr[selMonth-1]+"月的花費情況");
+	        ImageView ivCharts = (ImageView) findViewById(R.id.ivCharts);           
+	        String mUrl="";
+	   	    mUrl = "http://chart.apis.google.com/chart?chf=bg,s,000000";
+	    	mUrl+="&chxs=1,C2BDDD,11.5,0,l,676767|1,FF9900,11.5,0,l,676767";
+	    	mUrl+="&chxt=x,y";
+	    	mUrl+="&chs="+dm.widthPixels+"x"+dm.heightPixels;
+	    	mUrl+="&cht=lc";
+	    	mUrl+="&chco=E9225E";
+	    	mUrl+="&chls=2";
+	    	mUrl+="&chds=0,100000";
+	    	mUrl+="&chma=40,20,20,30";
+	    	mUrl+=getXYValue(0,1);    	        
+	    	mUrl+=getData(0,1);
+	    	tempMonthChart1 = getURLBitmap(mUrl);
+	        ivCharts.setImageBitmap(tempMonthChart1); 	
+        }
+        
+	}
+
+    private String getData(int type,int argv) {
+    	// 取得用於產生圖表的資料
+    	String data="&chd=t:";
+    	if (type==0) {
+		    int count[] = new int[12];
+			try {
+			    todoAcquireDB db = new todoAcquireDB(this);
+			    Cursor cursor = db.select();
+			    while(!cursor.isLast()){
+			    	cursor.moveToNext();
+					count[Integer.parseInt(cursor.getString(2).split("/")[1])-1]+=Integer.parseInt(cursor.getString(4));	
+				}
+	
+			} catch (Exception e) {
+				Log.e(TAG,e.toString());
+			}
+			data = data + count[0]; 
+			for (int n=1;n<12;n++){
+				data = data + "," + count[n];
+			}
+    	}
+    	return data;
+    }
+    private String getXYValue(int type,int argv) {
+    	String str = "";
+    	if (type==0) {
+	    	int day = dayForMonth[argv];
+	    	if (day==2) {
+	    		
+	    	}
+	    	str = "&chxr=0,1,"+day+"|1,0,100000";
+    	}
+    	return str;
+    }
+	private ArrayList<HashMap<String, Object>> getIData(int selNum) {
+		ArrayList<HashMap<String, Object>> alIData =  new ArrayList<HashMap<String, Object>>();
+ 	 
+		    todoHistoryDB db = new todoHistoryDB(this);
+		    Cursor cursor = db.select();
+		    while(!cursor.isLast()){
+		    	cursor.moveToNext();
+		    	if ((Integer.parseInt(cursor.getString(2).split("/")[1])+1)/2==selNum){
+		    	HashMap<String, Object> map = new HashMap<String, Object>();  
+		    	map.put("ItemInvoiceNumber", cursor.getString(1));
+	            map.put("ItemDateTime", cursor.getString(2));
+	            map.put("ItemStoreName", cursor.getString(3));
+	            map.put("ItemMoney", "$"+cursor.getString(4));
+	            map.put("ItemStatus", R.drawable.star);
+	            alIData.add(map);
+		    	}
+		    }
+	
+        return alIData;
+	}
+	private void showIDetail(int selNum) {
+        setContentView(R.layout.history_main_2);
+		ListView list = (ListView) findViewById(R.id.IMenuListView);
+		ArrayList<HashMap<String, Object>> listItem = new ArrayList<HashMap<String, Object>>();  
+		alIData = getIData(selNum);
+       	for (int n=0; n<alIData.size(); n++) {
+       		listItem.add(alIData.get(n));
+        }
+        
+        SimpleAdapter listItemAdapter = new SimpleAdapter(this,listItem,
+	            R.layout.detail_list_items,     
+	            new String[] {"ItemDateTime","ItemStoreName", "ItemInvoiceNumber","ItemMoney","ItemStatus"}, 
+	            new int[] {R.id.ItemDateTime,R.id.ItemStoreName,R.id.ItemInvoiceNumber,R.id.ItemMoney,R.id.ItemStatus}
+	    );
+		list.setAdapter(listItemAdapter);  
+		list.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				try {
+					Dialog dialog = new Dialog(EIProject_History_Detail.this);
+	                dialog.setContentView(R.layout.detail_list_items_dialog);
+               
+	                int selNum = arg2;
+	                TextView text = (TextView) dialog.findViewById(R.id.HistoryDialogItemInvoiceNumber);
+	                text.setText((String)((alIData.get(selNum)).get("ItemInvoiceNumber").toString()));
+	        		text = (TextView) dialog.findViewById(R.id.HistoryDialogItemStoreName);
+	                text.setText((String)((alIData.get(selNum)).get("ItemStoreName").toString()));
+	                text = (TextView) dialog.findViewById(R.id.HistoryDialogItemDateTime);
+	                text.setText((String)((alIData.get(selNum)).get("ItemDateTime").toString()));
+	        		text = (TextView) dialog.findViewById(R.id.HistoryDialogItemMoney);
+	                text.setText((String)((alIData.get(selNum)).get("ItemMoney").toString()));
+	                dialog.setCanceledOnTouchOutside(true);
+	                dialog.show();
+				}catch(Exception e){
+					Log.e(TAG,e.toString());
+				}
+				// TODO Auto-generated method stub
+				
+			}
+		});		
+	}
+    
+}

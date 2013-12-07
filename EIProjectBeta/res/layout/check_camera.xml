@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout 
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+>
+
+  <ImageView
+  		android:src="@drawable/getcheckinvoiceframe"
+        android:layout_width="fill_parent"
+  		android:layout_height="fill_parent">
+  </ImageView>
+  <TextView
+		android:text="掃描中…"
+		android:textColor="#00FF00"
+		android:id="@+id/tvStatus"
+		android:layout_width="wrap_content" 
+	  	android:layout_height="wrap_content" 
+	  	android:layout_marginLeft="400dip"
+	  	android:layout_marginTop="20dip"
+	  	android:textSize="28dip"
+	></TextView>
+  <SurfaceView
+    android:id="@+id/mSurfaceView1"
+    android:visibility="visible" 
+    android:layout_width="320dip" 
+    android:layout_height="240dip"
+    android:layout_marginTop="30dip"
+    android:layout_marginLeft="50dip">
+    
+  </SurfaceView> 
+</RelativeLayout>

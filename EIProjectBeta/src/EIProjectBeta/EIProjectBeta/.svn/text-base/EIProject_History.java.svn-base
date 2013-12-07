@@ -1,0 +1,167 @@
+package EIProjectBeta.EIProjectBeta;
+
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
+import android.widget.ViewFlipper;
+
+public class EIProject_History extends EIProjectBeta {
+
+    protected String TAG = "EIProject_History";
+    protected String [] monthCStr = {"","","","","き","せ","","","","","",""};
+    protected int [] dayForMonth = {31,28,31,30,31,30,31,31,30,31,30,31};
+    protected static int [] count;
+    protected static int selMonth;
+    protected static Map<String,String> storeName;
+    protected static ArrayList<HashMap<String, Object>> alIData;
+    private Bitmap tempYearChart;
+    
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //get Data from DB
+        todoHistoryDB db = new todoHistoryDB(this);
+        Cursor cursor = db.select();
+        
+        if (ViewDirect==1) {
+	        setContentView(R.layout.history_main_1);  
+			ListView list = (ListView) findViewById(R.id.MenuListView);
+			ArrayList<HashMap<String, Object>> listItem = new ArrayList<HashMap<String, Object>>();  
+	        
+	        count = new int[(new Date().getMonth()+1)/2+1];
+	        //璸衡祇布る
+	        countData();
+	        //祇布羆计
+	        int countTotal = 0;
+	        countTotal = cursor.getCount();
+	        
+	        TextView tvHistoryMenuTitle = (TextView)findViewById(R.id.tvHistoryMenuTitle);
+	        tvHistoryMenuTitle.setText("场祇布("+countTotal+")");
+	       	for (int n=((new Date().getMonth())/2+1)-1; n>=0; n--) {
+	       		HashMap<String, Object> map = new HashMap<String, Object>();  
+	            map.put("ItemMenu", "99 "+monthCStr[n*2]+"る~"+monthCStr[n*2+1]+"る("+count[n]+")");
+	            listItem.add(map);
+	        }
+	        
+	        SimpleAdapter listItemAdapter = new SimpleAdapter(this,listItem,
+		            R.layout.menu_list_items,     
+		            new String[] {"ItemMenu"}, 
+		            new int[] {R.id.ItemMenu}
+		    );
+			list.setAdapter(listItemAdapter);  
+			list.setOnItemClickListener(new OnItemClickListener() {
+	
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+						long arg3) {
+			        selMonth= ((new Date().getMonth()+1)/2+1-arg2-1)*2;
+					Intent intent = new Intent();
+			        intent.setClass(EIProject_History.this,EIProject_History_Detail.class);
+			    	startActivity(intent);
+					// TODO Auto-generated method stub
+					
+				}
+			});
+        }else if (ViewDirect==2) {
+        	setContentView(R.layout.history_main_charts);
+        	TextView tvChartTitle = (TextView) findViewById(R.id.tvChartsTitle);
+        	tvChartTitle.setText("さ–る禣薄猵");
+            ImageView ivCharts = (ImageView) findViewById(R.id.ivCharts);           
+            String mUrl="";
+   	        mUrl = "http://chart.apis.google.com/chart?chf=bg,s,000000";
+    	    mUrl+="&chxs=1,C2BDDD,11.5,0,l,676767|1,FF9900,11.5,0,l,676767";
+    	    mUrl+="&chxt=x,y";
+    	    mUrl+="&chs="+dm.widthPixels+"x"+dm.heightPixels;
+    	    mUrl+="&cht=lc";
+    	    mUrl+="&chco=E9225E";
+    	    mUrl+="&chls=2";
+    	    mUrl+="&chds=0,100000";
+    	    mUrl+="&chma=40,20,20,30";
+    	    mUrl+=getXYValue(0,0);    	        
+    	    mUrl+=getData(0,0);
+    	    tempYearChart = getURLBitmap(mUrl);
+            ivCharts.setImageBitmap(tempYearChart);
+       	}
+	}
+
+    private String getData(int type,int argv) {
+    	// 眔ノ玻ネ瓜戈
+    	String data="&chd=t:";
+    	if (type==0) {
+		    int count[] = new int[12];
+			try {
+			    todoAcquireDB db = new todoAcquireDB(this);
+			    Cursor cursor = db.select();
+			    while(!cursor.isLast()){
+			    	cursor.moveToNext();
+					count[Integer.parseInt(cursor.getString(2).split("/")[1])-1]+=Integer.parseInt(cursor.getString(4));	
+				}
+	
+			} catch (Exception e) {
+				Log.e(TAG,e.toString());
+			}
+			data = data + count[0]; 
+			for (int n=1;n<12;n++){
+				data = data + "," + count[n];
+			}
+    	}
+    	return data;
+    }
+    private String getXYValue(int type,int argv) {
+    	String str = "";
+    	if (type==0) {
+    		str = "&chxr=0,1,12|1,0,100000";
+    	}
+    	return str;
+    }
+    protected Bitmap getURLBitmap(String urlPic) {
+    	// 硓筁URL眔Bitmapン
+    	URL imageUrl = null;
+    	Bitmap bitmap = null;
+    	try {
+    		imageUrl = new URL(urlPic);
+    	}catch(Exception e){
+    		Log.e(TAG,e.toString());
+    	}
+    	try
+    	{
+    		HttpURLConnection conn = (HttpURLConnection)imageUrl.openConnection();
+    		conn.connect();
+    		InputStream is = conn.getInputStream();
+    		bitmap = BitmapFactory.decodeStream(is);
+    		is.close();
+    	}catch(Exception e){
+    		Log.e(TAG,e.toString());
+    	}
+    	return bitmap;
+    }
+    private void countData() {
+ 	    	//get data from DB
+ 	    	todoHistoryDB db = new todoHistoryDB(this);
+		    Cursor cursor = db.select();;
+				//璸衡祇布る
+	 	    	while(!cursor .isLast()){
+	 	    		cursor.moveToNext();   		
+	 	    		count[(Integer.parseInt(cursor.getString(2).split("/")[1])+1)/2-1]++;
+	 	    	}
+    }
+    
+}

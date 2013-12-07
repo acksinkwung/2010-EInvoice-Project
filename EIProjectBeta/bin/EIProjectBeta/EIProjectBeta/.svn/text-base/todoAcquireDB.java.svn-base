@@ -1,0 +1,93 @@
+package EIProjectBeta.EIProjectBeta;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+public class todoAcquireDB extends SQLiteOpenHelper
+{
+  private final static String DATABASE_NAME = "invoice_db";
+  private final static int DATABASE_VERSION = 1;
+  private final static String TABLE_NAME = "IID_Detail";
+  private final static String FIELD_id = "_id";
+  private final static String FIELD_IID= "IID";
+  private final static String FIELD_time= "time";
+  private final static String FIELD_storeID= "store_ID";
+  private final static String FIELD_amount = "amount";
+  private final static String FIELD_state = "state";
+  private final static String FIELD_money = "money";
+  private final static String HISTORY_TABLE_NAME = "certificate";
+  private final static String HISTORY_FIELD_id = "_id";
+  private final static String HISTORY_FIELD_certifacate_id= "cerfifacate_id";
+  private final static String HISTORY_FIELD_time= "time";
+  private final static String HISTORY_FIELD_IID= "IID";
+  private final static String HISTORY_FIELD_money = "money";     
+  public todoAcquireDB(Context context)
+  {
+    super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    
+  }
+
+  @Override
+  public void onCreate(SQLiteDatabase db)
+  {
+	
+  }
+
+  @Override
+  public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
+  {/*
+    String sql = "DROP TABLE IF EXISTS " + TABLE_NAME;
+    db.execSQL(sql);
+    onCreate(db);*/
+  }
+
+  public Cursor select()
+  {
+    SQLiteDatabase db = this.getReadableDatabase();
+    Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, null);
+    return cursor;
+  }
+  public Cursor selectHistory()
+  {
+    SQLiteDatabase db = this.getReadableDatabase();
+    Cursor cursor = db.query(HISTORY_TABLE_NAME, null, null, null, null, null, null);
+    return cursor;
+  }
+  public long insertRecord(String certifacate_id,String time,String IID,String money)
+  {
+    SQLiteDatabase db = this.getWritableDatabase();
+    /* 將新增的值放入ContentValues */
+    ContentValues cv = new ContentValues();
+    cv.put(HISTORY_FIELD_certifacate_id, certifacate_id);
+    cv.put(HISTORY_FIELD_time, time);
+    cv.put(HISTORY_FIELD_IID, IID);
+    cv.put(HISTORY_FIELD_money, money );
+    long row = db.insert(TABLE_NAME, null, cv);
+    return row;
+  }
+
+  public void delete(int id)
+  {
+    SQLiteDatabase db = this.getWritableDatabase();
+    String where = FIELD_id + " = ?";
+    String[] whereValue =
+    { Integer.toString(id) };
+    db.delete(TABLE_NAME, where, whereValue);
+  }
+ 
+
+  public void update(int id, String text)
+  {
+    SQLiteDatabase db = this.getWritableDatabase();
+    String where = FIELD_id + " = ?";
+    String[] whereValue =
+    { Integer.toString(id) };
+    /* 將修改的值放入ContentValues */
+    ContentValues cv = new ContentValues();
+    cv.put(FIELD_IID, text);
+    db.update(TABLE_NAME, cv, where, whereValue);
+  }
+}

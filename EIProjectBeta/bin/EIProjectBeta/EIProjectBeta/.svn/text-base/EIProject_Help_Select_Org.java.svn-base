@@ -1,0 +1,129 @@
+package EIProjectBeta.EIProjectBeta;
+
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import android.app.Dialog;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
+
+public class EIProject_Help_Select_Org extends EIProject_Help_Select {
+    private Dialog dialog;
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        try {
+	    	setContentView(R.layout.help_main_4);
+
+	    	ListView list = (ListView) findViewById(R.id.HelpOrgDetailListView);
+	        SimpleAdapter listItemAdapter = new SimpleAdapter(this,alOrgIData,
+		            R.layout.menu_list_items,
+		            new String[] {"ItemOrgName"}, 
+		            new int[] {R.id.ItemMenu}
+		    );
+			list.setAdapter(listItemAdapter);  
+			list.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+						long arg3) {
+					dialog = new Dialog(EIProject_Help_Select_Org.this);
+	                dialog.setContentView(R.layout.help_detail_list_items_dialog);
+	                selNum = arg2;
+	                TextView text = (TextView) dialog.findViewById(R.id.ItemHelpOrgDetailTitle);
+	                text.setText((String)((alOrgIData.get(selNum)).get("ItemOrgName").toString()));
+	                text = (TextView) dialog.findViewById(R.id.ItemHelpOrgDetailIntro);
+	                text.setText((String)((alOrgIData.get(selNum)).get("ItemOrgIntro").toString()));
+	                Button btnHelpOrg = (Button)dialog.findViewById(R.id.btnHelpOrg);
+	                btnHelpOrg.setOnClickListener(new OnClickListener() {
+	        			@Override
+	        			public void onClick(View v) {
+	        				dialog.cancel();
+	        				String IID=selIData.get(0).get("ItemIID").toString();
+	        				String IID_C=selIData.get(0).get("ItemCR").toString();
+	        				String IID_R=selIData.get(0).get("ItemCR").toString();
+	        				
+	        				for (int n = 1; n < selIData.size(); n++) {
+	        					IID = IID + selIData.get(n).get("ItemIID").toString();
+		        				IID_C = IID_C + selIData.get(n).get("ItemCR").toString().split(",")[0];
+		        				IID_R = IID_R + selIData.get(n).get("ItemCR").toString().split(",")[1]; 
+	        				}
+							if (GetHTML("http://140.118.9.68/match/?iid="+IID+"&C="+IID_C+"&R="+IID_R+"&DonateID="+String.valueOf(selNum)).equals("success")) {
+		        				setContentView(R.layout.help_main_5);
+							}
+								        				
+	        			}
+	        		});
+	        		dialog.setCanceledOnTouchOutside(true);
+	                dialog.show();
+				}
+			});	
+    	} catch(Exception e) {
+    		Log.e(TAG,e.toString());
+    	}	    
+	}
+	private String GetHTML(String URLString)
+	{
+	    try
+	    {
+	        HttpURLConnection urlConnection = null;
+	        URL url = new URL(URLString);
+	        //URLString為網址
+	        //假設想透過Proxy Server來連接到網址時可透過
+	        //URL url = new URL("http",String proxyip,int proxyport, URLString)
+	        urlConnection = (HttpURLConnection) url.openConnection();
+	        urlConnection.setRequestMethod("GET");
+	        urlConnection.setDoOutput(true);
+	        urlConnection.setDoInput(true);
+	 
+	        urlConnection.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows 2000)");
+	        urlConnection.setRequestProperty("Content-type", "text/html; charset= big5");
+	 
+	        urlConnection.connect();
+	        InputStream htmlbody = urlConnection.getInputStream();
+	 
+	        // ===============
+	        if (htmlbody != null)
+	        {
+	            int leng = 0;
+	            byte[] Data = new byte[100];
+	            byte[] totalData = new byte[0];
+	            int totalLeg = 0;
+	 
+	            do
+	            {
+	                leng = htmlbody.read(Data);
+	                if (leng > 0)
+	                {
+	                    totalLeg += leng;
+	                    byte[] temp = new byte[totalLeg];
+	                    System.arraycopy(totalData, 0, temp, 0, totalData.length);
+	                    System.arraycopy(Data, 0, temp, totalData.length, leng);
+	                    totalData = temp;
+	                }
+	            }
+	            while (leng > 0);
+	 
+	            return new String(totalData, "UTF-8"); //回傳HTML原始碼
+	        }
+	        else
+	        {
+	            return "Undefined";
+	        }
+	    }
+	    catch (Exception e)
+	    {
+	    	return "Undefined";
+	    }
+		
+	}
+
+    
+}

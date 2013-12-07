@@ -1,0 +1,95 @@
+package EIProjectBeta.EIProjectBeta;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+public class todoCheckDB extends SQLiteOpenHelper
+{
+  private final static String DATABASE_NAME = "invoice_db";
+  private final static int DATABASE_VERSION = 1;
+  private final static String TABLE_NAME = "IID_Detail";
+  private final static String FIELD_id = "_id";
+  private final static String FIELD_IID= "IID";
+  private final static String FIELD_time= "time";
+  private final static String FIELD_storeID= "store_ID";
+  private final static String FIELD_amount = "amount";
+  private final static String FIELD_state = "state";
+  private final static String FIELD_money = "money";
+ // public final static String FIELD_TEXT = "todo_text";
+
+  public todoCheckDB(Context context)
+  {
+    super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    
+  }
+
+  @Override
+  public void onCreate(SQLiteDatabase db)
+  {
+   //  建立table 
+    String sql = "CREATE TABLE " + TABLE_NAME + " (" + FIELD_id
+        + " INTEGER primary key autoincrement, " + " " + FIELD_IID + " text, "+" "+FIELD_state+" text, "
+        +" "+FIELD_IID+" text)";
+    db.execSQL(sql);
+	
+  }
+
+  @Override
+  public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
+  {
+    String sql = "DROP TABLE IF EXISTS " + TABLE_NAME;
+    db.execSQL(sql);
+    onCreate(db);
+  }
+
+  public Cursor select()
+  {
+    SQLiteDatabase db = this.getReadableDatabase();
+    Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, null);
+    return cursor;
+  }
+
+  public long insert(String _id,String IID,String time,String storeID,String amount,String state,String money)
+  {
+    SQLiteDatabase db = this.getWritableDatabase();
+    /* 將新增的值放入ContentValues */
+    ContentValues cv = new ContentValues();
+    cv.put(FIELD_id, _id);
+    cv.put(FIELD_IID, IID);
+    cv.put(FIELD_time, time);
+    cv.put(FIELD_storeID, storeID);
+    cv.put(FIELD_amount, amount);
+    cv.put(FIELD_state, state);
+    cv.put(FIELD_money, money);
+    
+ 
+    long row = db.insert(TABLE_NAME, null, cv);
+    return row;
+  }
+
+  public void delete(int id)
+  {
+    SQLiteDatabase db = this.getWritableDatabase();
+    String where = FIELD_id + " = ?";
+    String[] whereValue =
+    { Integer.toString(id) };
+    db.delete(TABLE_NAME, where, whereValue);
+  }
+ 
+
+  public void update_State_Money(String IID, String state,String money)
+  {
+    SQLiteDatabase db = this.getWritableDatabase();
+    String where = FIELD_IID + " = ?";
+    String[] whereValue =
+    { IID };
+    /* 將修改的值放入ContentValues */
+    ContentValues cv = new ContentValues();
+    cv.put(FIELD_state,state );
+    cv.put(FIELD_money,money);
+    db.update(TABLE_NAME, cv, where, whereValue);
+  }
+}

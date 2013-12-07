@@ -1,0 +1,123 @@
+package EIProjectBeta.EIProjectBeta;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
+
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.LuminanceSource;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.Result;
+import com.google.zxing.common.HybridBinarizer;
+
+
+
+
+public class EIProject_Check_nowin  extends Activity {
+private static boolean flag=false;
+private static int register;
+private String [] monthCStr = {"一","二","三","四","五","六","七","八","九","十","十一","十二"};
+// Blind Signature相關孌數
+private ArrayList<HashMap<String, Object>> alIData;
+	public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.check_dialog);
+       
+        	TextView text = (TextView)this.findViewById(R.id.check_text);
+        	text.setText("無中獎發票");
+        	ImageButton bn =(ImageButton) this.findViewById(R.id.check_button);
+        	ImageView iv = (ImageView) this.findViewById(R.id.checkImage);
+        	iv.setImageResource(R.drawable.nowin);
+        	bn.setOnClickListener(new View.OnClickListener() {  
+        		public void onClick(View view) {  
+        			
+        			showNoWinInvoice(4);
+        			
+        			
+        		}  
+        	
+        });  
+ 	
+	}
+private ArrayList<HashMap<String, Object>> getNoWinIData(int selNum) {
+    	
+		ArrayList<HashMap<String, Object>> alIData =  new ArrayList<HashMap<String, Object>>();
+ 	 
+		    todoHistoryDB db = new todoHistoryDB(this);
+		    Cursor cursor = db.select_noWinInvoice();
+		    while(!cursor.isLast()){
+		    	cursor.moveToNext();
+		    	if ((Integer.parseInt(cursor.getString(2).split("/")[1])+1)/2==selNum){
+		    	HashMap<String, Object> map = new HashMap<String, Object>();  
+		    	map.put("ItemInvoiceNumber", cursor.getString(1));
+	            map.put("ItemDateTime", cursor.getString(2));
+	   
+	            map.put("ItemStatus", R.drawable.star);
+	            alIData.add(map);
+		    	}
+		    }
+	
+        return alIData;
+	}
+	
+	 
+	 private void showNoWinInvoice(int selNum) {
+	        setContentView(R.layout.check_done_left);
+			ListView list = (ListView) findViewById(R.id.IMenuListView);
+			
+			ImageView btnRight=(ImageView)findViewById(R.id.right);
+			ArrayList<HashMap<String, Object>> listItem = new ArrayList<HashMap<String, Object>>();  
+			
+			alIData = getNoWinIData(selNum);
+	       	for (int n=0; n<alIData.size(); n++) {
+	       		listItem.add(alIData.get(n));
+	        }
+	        
+	        SimpleAdapter listItemAdaptedr = new SimpleAdapter(this,listItem,
+		            R.layout.check_neverdo_item,     
+		            new String[] {"ItemDateTime","ItemInvoiceNumber"}, 
+		            new int[] {R.id.tvCheckNeverDOTime,R.id.tvCheckNeverDONumber}
+		    );
+			list.setAdapter(listItemAdaptedr);  
+			
+			btnRight.setOnClickListener(new View.OnClickListener() {  
+	            public void onClick(View view) {  
+	            	 Intent intent = new Intent();
+	            	 Bundle bundle = new Bundle();
+	             	  bundle.putInt("selNum", 4);
+	             	  intent.putExtras(bundle);
+	              	  intent.setClass(EIProject_Check_nowin.this, EIProject_Check_luckyNumberDisplay.class);
+	              	  
+	              	  /* 呼叫一個新的Activity */
+	             	  startActivity(intent);
+	              	  /* 關閉原本的Activity */
+	             	 EIProject_Check_nowin.this.finish(); 
+	            }  
+	        });
+	    }
+	 
+	
+		
+		
+		
+	
+	
+	
+
+}

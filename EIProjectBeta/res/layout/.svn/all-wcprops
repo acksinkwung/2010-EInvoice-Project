@@ -1,0 +1,269 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout
+END
+acquire_his_main_1.xml
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/acquire_his_main_1.xml
+END
+acquire_his_main_2.xml
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/acquire_his_main_2.xml
+END
+check_main.xml
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/check_main.xml
+END
+detail_check_done_item.xml
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/detail_check_done_item.xml
+END
+main.xml
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/main.xml
+END
+history_main_1.xml
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/history_main_1.xml
+END
+history_main_2.xml
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/history_main_2.xml
+END
+help_his_detail_list_items2.xml
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/help_his_detail_list_items2.xml
+END
+check_dialog.xml
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/check_dialog.xml
+END
+detail_list_items.xml
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/detail_list_items.xml
+END
+detail_check_neverdo_item.xml
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/detail_check_neverdo_item.xml
+END
+luckynumber.xml
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/luckynumber.xml
+END
+menu_list_items.xml
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/menu_list_items.xml
+END
+help_his_detail_list_items.xml
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/help_his_detail_list_items.xml
+END
+check_win_dialog.xml
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/check_win_dialog.xml
+END
+acquire_his_detail_list_items.xml
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/acquire_his_detail_list_items.xml
+END
+help_main_1.xml
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/help_main_1.xml
+END
+help_main_2.xml
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/help_main_2.xml
+END
+shop_main.xml
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/shop_main.xml
+END
+help_main_3.xml
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/help_main_3.xml
+END
+help_his_main_1.xml
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/help_his_main_1.xml
+END
+help_main_4.xml
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/help_main_4.xml
+END
+help_his_main_2.xml
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/help_his_main_2.xml
+END
+help_main_5.xml
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/help_main_5.xml
+END
+help_detail_list_items_dialog.xml
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/help_detail_list_items_dialog.xml
+END
+acquire_detail_list_items2.xml
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/acquire_detail_list_items2.xml
+END
+acquire_main_qrcode.xml
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/acquire_main_qrcode.xml
+END
+check_done_left.xml
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/check_done_left.xml
+END
+check_luckynumber.xml
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/check_luckynumber.xml
+END
+check_fromqrcode.xml
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/check_fromqrcode.xml
+END
+acquire_main_status.xml
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/acquire_main_status.xml
+END
+check_neverdo_main.xml
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/check_neverdo_main.xml
+END
+help_detail_list_items.xml
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/help_detail_list_items.xml
+END
+check_nowin_dialog.xml
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/check_nowin_dialog.xml
+END
+acquire_detail_list_items.xml
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/acquire_detail_list_items.xml
+END
+check_fromnet.xml
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/check_fromnet.xml
+END
+detail_check_done_main.xml
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/detail_check_done_main.xml
+END
+history_main_charts.xml
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/history_main_charts.xml
+END
+detail_list_items_dialog.xml
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/detail_list_items_dialog.xml
+END
+check_neverdo_item.xml
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/check_neverdo_item.xml
+END
+acquire_main_1.xml
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/acquire_main_1.xml
+END
+acquire_main_2.xml
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/acquire_main_2.xml
+END
+luckynumber_item.xml
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/luckynumber_item.xml
+END
+acquire_main_3.xml
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/digital_invoice/!svn/ver/29/EIProject/res/layout/acquire_main_3.xml
+END

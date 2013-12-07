@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/digital_invoice/!svn/ver/29/EIProject/lib
+END
+core.jar
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/digital_invoice/!svn/ver/29/EIProject/lib/core.jar
+END
+javase.jar
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/digital_invoice/!svn/ver/29/EIProject/lib/javase.jar
+END
+SwetakeQRCode.jar
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/digital_invoice/!svn/ver/29/EIProject/lib/SwetakeQRCode.jar
+END

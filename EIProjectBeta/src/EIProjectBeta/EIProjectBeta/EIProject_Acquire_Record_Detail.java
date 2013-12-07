@@ -1,0 +1,72 @@
+package EIProjectBeta.EIProjectBeta;
+
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ViewFlipper;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
+
+public class EIProject_Acquire_Record_Detail extends EIProject_Acquire_Record{
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.acquire_his_main_2);
+    	TextView text = (TextView) findViewById(R.id.HistoryDetailAcquireDialogItemDateTime);
+        text.setText(CerMenuData.get(selRecord).get("ItemAcquireHisDate").toString());
+		text = (TextView) findViewById(R.id.HistoryDetailAcquireDialogItemCount);
+        text.setText(CerMenuData.get(selRecord).get("ItemAcquireHisCount").toString());
+        text = (TextView) findViewById(R.id.HistoryDetailAcquireDialogItemTotalMoney);
+        text.setText(CerMenuData.get(selRecord).get("ItemAcquireHisMoney").toString());
+		text = (TextView) findViewById(R.id.HistoryDetailAcquireDialogItemTaxMoney);
+        text.setText(CerMenuData.get(selRecord).get("ItemAcquireHisTaxMoney").toString());
+		TextView title = (TextView) findViewById(R.id.tvHistoryDetailAcquireMenuTitle);
+		int n = ((Integer.parseInt(CerMenuData.get(selRecord).get("ItemAcquireHisDate").toString().split("-")[1]))/2+1)-2;
+		listItem = getCerIDetailData(CerMenuData.get(selRecord).get("ItemAcquireHisIID").toString());
+        title.setText("99ж~ "+monthCStr[n*2]+"ды~"+monthCStr[n*2+1]+"ды");
+	    ListView list = (ListView) findViewById(R.id.HistoryDetailAcquireMenuListView);
+		SimpleAdapter listItemAdapter = new SimpleAdapter(this,listItem,
+	            R.layout.acquire_detail_list_items2,     
+	            new String[] {"ItemInvoiceNumber","ItemInvoiceNumberLight","ItemDateTime", "ItemMoney","ItemStatusA"}, 
+	            new int[] {R.id.ItemAcquireInvoiceNumber,R.id.ItemAcquireInvoiceNumberLight,R.id.ItemAcquireDateTime,R.id.ItemAcquireMoney,R.id.ItemAcquireStatus}
+	    );
+		list.setAdapter(listItemAdapter);  
+		list.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				
+			}
+		});
+		Button btnR31 = (Button)findViewById(R.id.ItemHistoryDetailAcquireRight31);
+		btnR31.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				viewFlipper.setInAnimation(slideRightIn);
+				viewFlipper.setOutAnimation(slideRightOut);
+				viewFlipper.showNext();
+			}
+			
+		});
+		Button btnR32 = (Button)findViewById(R.id.ItemHistoryDetailAcquireLeft32);
+		btnR32.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				viewFlipper.setInAnimation(slideLeftIn);
+				viewFlipper.setOutAnimation(slideLeftOut);
+				viewFlipper.showNext();
+			}
+			
+		});
+		viewFlipper = (ViewFlipper) findViewById(R.id.AcquireFlipper);
+	}
+
+}

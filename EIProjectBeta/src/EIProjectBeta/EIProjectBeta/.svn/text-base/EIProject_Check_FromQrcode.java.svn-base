@@ -1,0 +1,430 @@
+package EIProjectBeta.EIProjectBeta;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
+
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.LuminanceSource;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.Result;
+import com.google.zxing.common.HybridBinarizer;
+
+
+
+
+public class EIProject_Check_FromQrcode  extends Activity {
+private static String[] s_number = new String[3];
+private static String[] h_number = new String[3];	
+private Bitmap bm; 
+private LuminanceSource source; 
+private Result result; 
+private static boolean flag=false;
+private static int register;
+private String [] monthCStr = {"一","二","三","四","五","六","七","八","九","十","十一","十二"};
+// Blind Signature相關孌數
+private ArrayList<HashMap<String, Object>> alIData;
+public static final int CAMERA_REQUEST_CODE = 11;
+public String SDCard_path;
+	public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.check_fromqrcode);
+       register=1;
+      /*  File vSDCard = null;
+        if( !(Environment.getExternalStorageState().equals(Environment.MEDIA_REMOVED))) {
+        	// 取得 SD Card 位置
+        	vSDCard = Environment.getExternalStorageDirectory();
+        }
+    	// 判斷目錄是否存在
+    	File vPath = new File( vSDCard.getParent() + vSDCard.getName() + "/EIProject" );
+    	if( !vPath.exists()) {
+    	  vPath.mkdirs();   
+    	}
+    	// 設定SDCard的根目錄
+    	SDCard_path = vSDCard.getParent() + vSDCard.getName(); 
+    	*/
+    	initCamera();
+    	/* 	
+        s_number[0]="11111111";
+        s_number[1]="11111111";
+        s_number[2]="11111111";
+        
+        h_number[0]="11111111";
+        h_number[1]="11111111";
+        h_number[2]="11111111";
+        check();
+        if(flag){
+        	
+        	  Intent intent = new Intent();
+         	  intent.setClass(EIProject_Check_FromQrcode.this, EIProject_Check_win.class);
+         	  
+         	  /* 呼叫一個新的Activity 
+        	  startActivity(intent);
+         	  /* 關閉原本的Activity 
+        	  EIProject_Check_FromQrcode.this.finish();
+       
+        }else{
+        	  Intent intent = new Intent();
+         	  intent.setClass(EIProject_Check_FromQrcode.this, EIProject_Check_nowin.class);
+         	  
+         	  /* 呼叫一個新的Activity 
+        	  startActivity(intent);
+         	  /* 關閉原本的Activity 
+        	  EIProject_Check_FromQrcode.this.finish();
+      
+        }
+	*/
+	}
+private ArrayList<HashMap<String, Object>> getNoWinIData(int selNum) {
+    	
+		ArrayList<HashMap<String, Object>> alIData =  new ArrayList<HashMap<String, Object>>();
+ 	 
+		    todoHistoryDB db = new todoHistoryDB(this);
+		    Cursor cursor = db.select_noWinInvoice();
+		    while(!cursor.isLast()){
+		    	cursor.moveToNext();
+		    	if ((Integer.parseInt(cursor.getString(2).split("/")[1])+1)/2==selNum){
+		    	HashMap<String, Object> map = new HashMap<String, Object>();  
+		    	map.put("ItemInvoiceNumber", cursor.getString(1));
+	            map.put("ItemDateTime", cursor.getString(2));
+	   
+	            map.put("ItemStatus", R.drawable.star);
+	            alIData.add(map);
+		    	}
+		    }
+	
+        return alIData;
+	}
+	private void showNoWinInvoice(int selNum) {
+        setContentView(R.layout.check_done_left);
+		ListView list = (ListView) findViewById(R.id.IMenuListView);
+		
+		ImageView btnRight=(ImageView)findViewById(R.id.right);
+		ArrayList<HashMap<String, Object>> listItem = new ArrayList<HashMap<String, Object>>();  
+		
+		alIData = getNoWinIData(selNum);
+       	for (int n=0; n<alIData.size(); n++) {
+       		listItem.add(alIData.get(n));
+        }
+        
+        SimpleAdapter listItemAdaptedr = new SimpleAdapter(this,listItem,
+	            R.layout.check_neverdo_item,     
+	            new String[] {"ItemDateTime","ItemInvoiceNumber"}, 
+	            new int[] {R.id.tvCheckNeverDOTime,R.id.tvCheckNeverDONumber}
+	    );
+		list.setAdapter(listItemAdaptedr);  
+		
+		btnRight.setOnClickListener(new View.OnClickListener() {  
+            public void onClick(View view) {  
+            	 Intent intent = new Intent();
+            	 Bundle bundle = new Bundle();
+             	  bundle.putInt("selNum", 4);
+             	  intent.putExtras(bundle);
+              	  intent.setClass(EIProject_Check_FromQrcode.this, EIProject_Check_luckyNumberDisplay.class);
+              	  
+              	  /* 呼叫一個新的Activity */
+             	  startActivity(intent);
+              	  /* 關閉原本的Activity */
+             	 EIProject_Check_FromQrcode.this.finish(); 
+            }  
+        });
+    }
+	 private void showWinInvoice(int selNum){
+	    	setContentView(R.layout.detail_check_done_main);
+	    	ImageView btnRight=(ImageView)findViewById(R.id.flip_right);
+	        ImageView btnLeft=(ImageView)findViewById(R.id.flip_left);
+	        register = selNum;
+	    	
+	    	TextView tv = (TextView)findViewById(R.id.doneMainTitle);
+			ListView list = (ListView) findViewById(R.id.doneMainLV);
+			ArrayList<HashMap<String, Object>> listItem = new ArrayList<HashMap<String, Object>>();  
+			
+			//設定TITLE月份
+	        switch(selNum){
+	        	case 1:
+	        		tv.setText("99年 "+(monthCStr[selNum])+"月~"+(monthCStr[selNum+1])+"月");
+	        		break;
+	        	case 2:
+	        		tv.setText("99年 "+(monthCStr[selNum+1])+"月~"+(monthCStr[selNum+2])+"月");
+	        		break;
+	        	case 3:
+	        		tv.setText("99年 "+(monthCStr[selNum+2])+"月~"+(monthCStr[selNum+3])+"月");
+	        		break;
+	        	case 4:
+	        		tv.setText("99年 "+(monthCStr[selNum+3])+"月~"+(monthCStr[selNum+4])+"月");
+	        		break;
+	        	case 5:
+	        		tv.setText("99年 "+(monthCStr[selNum+4])+"月~"+(monthCStr[selNum+5])+"月");
+	        		break;
+	        	case 6:
+	        		tv.setText("99年 "+(monthCStr[selNum+5])+"月~"+(monthCStr[selNum+6])+"月");
+	        		break;
+	        }
+			
+			
+			//get wining Invoice Data
+			alIData = getWinIData(selNum);
+			//assign data to ListItem
+	       	for (int n=0; n<alIData.size(); n++) {
+	       		listItem.add(alIData.get(n));
+	        }
+	        //set up Adapter
+	        SimpleAdapter listItemAdaptedr = new SimpleAdapter(this,listItem,
+		            R.layout.detail_check_done_item,     
+		            new String[] {"ItemDateTime","ItemInvoiceNumber","ItemMoney"}, 
+		            new int[] {R.id.ItemDateTime,R.id.ItemInvoiceNumber,R.id.ItemMoney}
+		    );
+	        //data繫結
+			list.setAdapter(listItemAdaptedr);  
+			
+			
+			
+			
+			//設定顯示對獎號碼按鈕
+			btnRight.setOnClickListener(new View.OnClickListener() {  
+		            public void onClick(View view) {  
+		            	 Intent intent = new Intent();
+		              	  intent.setClass(EIProject_Check_FromQrcode.this, EIProject_Check_luckyNumberDisplay.class);
+		              	  Bundle bundle = new Bundle();
+		              	  bundle.putInt("selNum", 4);
+		              	  intent.putExtras(bundle);
+		              	  /* 呼叫一個新的Activity */
+		             	  startActivity(intent);
+		              	  /* 關閉原本的Activity */
+		             	 EIProject_Check_FromQrcode.this.finish(); 
+		            }  
+		        });
+		        
+			
+			//設定顯示未中獎號碼按鈕
+			btnLeft.setOnClickListener(new View.OnClickListener() {  
+		            public void onClick(View view) {  
+		          //  	showNoWinInvoice(register);
+		            }  
+		        });  
+			
+	    }
+	 private ArrayList<HashMap<String, Object>> getWinIData(int selNum) {
+			ArrayList<HashMap<String, Object>> alIData =  new ArrayList<HashMap<String, Object>>();
+	 	 
+			    todoHistoryDB db = new todoHistoryDB(this);
+			    Cursor cursor = db.select_winInvoice();
+			    while(!cursor.isLast()){
+			    	cursor.moveToNext();
+			    	if ((Integer.parseInt(cursor.getString(2).split("/")[1])+1)/2==selNum){
+			    	HashMap<String, Object> map = new HashMap<String, Object>();  
+			    	map.put("ItemInvoiceNumber", cursor.getString(1));
+		            map.put("ItemDateTime", cursor.getString(2));
+		            map.put("ItemStoreName", cursor.getString(3));
+		            map.put("ItemStatus", R.drawable.star);
+		            String money = "0";
+		            if (cursor.getString(6).equals("1")) {
+		            	money="$200000";
+		            }else if (cursor.getString(6).equals("2")) {
+		            	money="$40000";
+		            }else if (cursor.getString(6).equals("3")) {
+		            	money="$10000";
+		            }else if (cursor.getString(6).equals("4")) {
+		            	money="$4000";
+		            }else if (cursor.getString(6).equals("5")) {
+		            	money="$1000";
+		            }else if (cursor.getString(6).equals("6")) {
+		            	money="$200";
+		            }
+		            map.put("ItemMoney", money);
+		            alIData.add(map);
+			    	}
+			    }
+		
+	        return alIData;
+		}
+	 protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	    {
+	    	
+	    		
+	    	String strQRTestFile = "/sdcard/EIProject/luckyNumber_qr.jpg";
+	        	Bitmap myBmp = BitmapFactory.decodeFile(strQRTestFile); 
+	            String strQR = decodeQRImage(myBmp);
+	           Log.d("CheckQRCode",strQR);
+	          
+	           s_number[0]=new String();
+	           s_number[1]=new String();
+	           s_number[2]=new String();
+	           h_number[0] = new String();
+	           h_number[1] = new String();
+	           h_number[2] = new String();
+	            
+	           s_number[0]="79721354";
+	            
+	           s_number[0]=strQR.substring(0, 9);
+	            
+	           s_number[1]=strQR.substring(0, 9);
+	            
+	           s_number[2]=strQR.substring(0, 9);
+	            
+	           h_number[0]=strQR.substring(28, 36);
+	           h_number[1]=strQR.substring(37, 45);
+	           h_number[2]=strQR.substring(46, 54);
+	            check();
+	            if(flag){
+	            	Dialog dialog = new Dialog(EIProject_Check_FromQrcode.this);
+	                dialog.setContentView(R.layout.check_dialog);
+	                TextView text = (TextView)dialog.findViewById(R.id.check_text);
+	                text.setText("恭喜中獎");
+	                ImageButton bn =(ImageButton) dialog.findViewById(R.id.check_button);
+	                bn.setImageResource(R.drawable.win_star);
+	                bn.setOnClickListener(new View.OnClickListener() {  
+	                	public void onClick(View view) {  
+	                		
+	                	}  
+
+	                });  
+	                dialog.show();
+	            }else{
+	            	Dialog dialog = new Dialog(EIProject_Check_FromQrcode.this);
+	                dialog.setContentView(R.layout.check_dialog);
+	                TextView text = (TextView)dialog.findViewById(R.id.check_text);
+	                text.setText("無中獎發票");
+	                ImageButton bn =(ImageButton) dialog.findViewById(R.id.check_button);
+	                bn.setImageResource(R.drawable.nowin);
+	                bn.setOnClickListener(new View.OnClickListener() {  
+	                	public void onClick(View view) {  
+	                		
+	                	}  
+
+	                });  
+	                dialog.show();
+	            	
+	            	
+	            	
+	            	
+	            }
+	    
+	           
+	    	
+	    }
+	private void initCamera() {
+	    // 開啟系統內建Camera
+
+	    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+	   
+	    File out = new File("/sdcard/EIProject/luckyNumber_qr.jpg");
+	    
+	    Uri uri = Uri.fromFile(out);
+	    intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+	    startActivityForResult(intent, CAMERA_REQUEST_CODE);
+    }
+	private String decodeQRImage(Bitmap myBmp )
+	{
+	    // QRCode解碼
+		source = new RGBLuminanceSource(myBmp); 
+		String  decryptedText =  "ERROR";
+		BinaryBitmap bbitmap = new BinaryBitmap(new HybridBinarizer(source));  
+		result = new Result("", null, null, null);
+		try {
+			result = new MultiFormatReader().decode(bbitmap);
+		}catch (Exception e) {
+		    Log.v("****Error", e.toString());
+		}
+		decryptedText = result.getText();
+		Log.v("%%%%",result.getText());
+		return decryptedText;
+	}
+	
+	
+	
+	private void check(){
+		
+		todoCheckDB Checkdb=new todoCheckDB(this);
+		todoHistoryDB HistoryDB = new todoHistoryDB(this);
+		Cursor cursor = HistoryDB.select_nerverDoInvoice();
+		String number = new String();//記錄發票號碼
+		
+		ArrayList<String> mArrayList = new ArrayList<String>(); 
+	     for(cursor.moveToFirst(); cursor.moveToNext(); cursor.isAfterLast()) { 
+	         // The Cursor is now set to the right position 
+	         mArrayList.add(cursor.getString(1)); 
+	     } 
+	     Log.v("InvoiceARRAY",mArrayList.toString());
+	     
+	     for(int i=0;i<s_number.length;i++){
+	    	 for(int j=0;j<mArrayList.size();j++){
+	    		 
+	    		 Log.e("luckyNumber",s_number[i]);
+	    		 Log.v("Number",mArrayList.get(j).substring(2));
+	    		 if(s_number[i].equals(mArrayList.get(j).substring(2))){
+	    			 flag = true;	
+	    		 }
+	    		 
+	    	 }
+	     }
+	     
+	     for(int i=0;i<h_number.length;i++)
+			{	  
+			  for(int j=0;j<mArrayList.size();j++)
+			  {
+			    number = mArrayList.get(j);
+				    	  
+			    	for(int k=5;k>=0;k--)
+			    	{
+			    		Log.e("****",h_number[i].substring(k));
+			    		Log.v("****",number.substring(k+2));
+			    	  if(number.substring(k+2).equals(h_number[i].substring(k)))
+			    	  {
+			    		//  winTitle.setText("中6獎");
+			    		  if(number.substring(k).equals(h_number[i].substring(k-1))){
+			    			//  winTitle.setText("中5獎");
+			    			  if(number.substring(k-1).equals(h_number[i].substring(k-2))){
+			    			//	  winTitle.setText("中4獎");
+			    				  if(number.substring(k-2).equals(h_number[i].substring(k-3))){
+			    			//		  winTitle.setText("中3獎");
+			    					  if(number.substring(k-3).equals(h_number[i].substring(k-4))){
+			    				//		  winTitle.setText("中2獎");
+			    						  if(number.substring(k-4).equals(h_number[i].substring(k-5))){
+			    				//			  winTitle.setText("中1獎");
+			    			    		  }  
+						    		  }  
+					    		  }
+				    		  }
+			    		  }
+			    		  
+			    		  flag = true;
+			    		  
+			    		 
+			    	  }
+			    		  
+			    		 
+			    		
+			    		
+			    	  }
+			    	
+			    	}
+			    }
+			      
+	
+	
+		
+		
+		
+	}
+	
+	
+
+}

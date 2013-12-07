@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="EIProjectBeta.EIProjectBeta"
+      android:versionCode="1"
+      android:versionName="1.0">
+    <application android:icon="@drawable/icon" android:label="@string/app_name">
+        <activity android:name=".EIProjectBeta"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+		<activity android:name="EIProject_Shop"></activity>
+		<activity android:name="EIProject_Shop_Invoice"></activity>
+		<activity android:name="EIProject_Shop_GetInvoice"></activity>
+		<activity android:name="EIProject_History"></activity>
+		<activity android:name="EIProject_History_Detail"></activity>
+		<activity android:name="EIProject_Acquire"></activity>
+		<activity android:name="EIProject_Acquire_Select"></activity>
+		<activity android:name="EIProject_Acquire_CheckList"></activity>
+		<activity android:name="EIProject_Acquire_Send"></activity>
+		<activity android:name="EIProject_Acquire_Record"></activity>
+		<activity android:name="EIProject_Acquire_Record_Detail"></activity>
+		<activity android:name="EIProject_Acquire_GetCertificate"></activity>
+		<activity android:name="EIProject_Help"></activity>
+		<activity android:name="EIProject_Help_Select_Detail"></activity>
+		<activity android:name="EIProject_Help_Select_Org"></activity>
+		<activity android:name="EIProject_Help_Record"></activity>
+		<activity android:name="EIProject_Help_Record_Detail"></activity>
+		<activity android:name="EIProject_Help"></activity>
+		<activity android:name="EIProject_Check"></activity>
+		<activity android:name="EIProject_Check_FromQrcode"></activity>
+		<activity android:name="EIProject_Check_FromNet"></activity>
+		<activity android:name="EIProject_Check_neverDO"></activity>
+		<activity android:name="EIProject_Check_done"></activity>
+		<activity android:name="EIProject_Check_luckyNumberDisplay"></activity>
+		<activity android:name="EIProject_Check_win"></activity>
+		<activity android:name="EIProject_Check_nowin"></activity>
+		<activity android:name="EIProject_Check_ShowDoneDetail"></activity>
+		<activity android:name="EIProject_Check_nowin_detail"></activity>
+		<activity android:name="EIProject_Check_win_detail"></activity>
+		<activity android:name="EIProject_Check_GetCInvoiceQrcode"></activity>
+		
+    </application>
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.CAMERA"></uses-permission>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+
+</manifest> 
